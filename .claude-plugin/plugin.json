@@ -1,0 +1,11 @@
+{
+  "name": "tasks",
+  "displayName": "Tasks",
+  "version": "0.1.0",
+  "description": "Connects your AI tool to Tasks (tasks.vinguler.com): the MCP server with a browser log-in, the lean way of working with items and resume cards, handover and continue, and a usage hook.",
+  "author": { "name": "VinGuler", "url": "https://github.com/VinGuler" },
+  "homepage": "https://tasks.vinguler.com",
+  "repository": "https://github.com/VinGuler/tasks-plugin",
+  "license": "MIT",
+  "keywords": ["tasks", "mcp", "project-management", "handover", "usage"]
+}

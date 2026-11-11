@@ -1,0 +1,12 @@
+{
+  "name": "vinguler",
+  "description": "Plugins by VinGuler: Tasks for AI tools.",
+  "owner": { "name": "VinGuler", "url": "https://github.com/VinGuler" },
+  "plugins": [
+    {
+      "name": "tasks",
+      "source": "./",
+      "description": "Tasks for your AI tool: the MCP server (browser log-in), workflow skills, handover and continue, usage hook."
+    }
+  ]
+}
