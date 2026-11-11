@@ -25,7 +25,9 @@ description: Move a project from Tasks local mode (markdown in `.tasks/`) to hos
    Keep a map old key → new key.
 6. **Handover:** if `.tasks/handover.md` exists, write it as the user's handover document (see
    `wrap-up`), with the old keys replaced by the new ones.
-7. **Finish:** write the key map to `.tasks/moved.md`, set `"mode": "hosted"` in `.tasks/config.json`
+7. **Usage log:** `~/.tasks/usage.jsonl` (local usage) is not uploaded; it stays on the machine.
+   If you read it, skip lines that don't parse as JSON.
+8. **Finish:** write the key map to `.tasks/moved.md`, set `"mode": "hosted"` in `.tasks/config.json`
    (and in `~/.tasks/config.json` run the usage setup of `tasks-workflow` if the user wants usage
    reporting), and tell the user what was created. Suggest removing `.tasks/items` and `.tasks/docs`
    only once they have checked Tasks.
