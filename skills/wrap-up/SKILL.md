@@ -5,6 +5,10 @@ description: End a working session with Tasks so the next one (a new conversatio
 
 # Wrap up a session
 
+In local mode (`.tasks/config.json` says `"mode": "local"`) the same steps apply to the files of
+the `tasks-local` skill: Resume sections and notes in `.tasks/items/`, the handover in
+`.tasks/handover.md`.
+
 1. **Items you worked on:** for each, `set_resume` with where you stopped and the exact next step,
    and `log_work` if something since the last note matters (decisions, commits, what is blocked).
    Leave the status as it really is: `IN_PROGRESS` if work remains, `DONE` only if finished.

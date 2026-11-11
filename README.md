@@ -11,6 +11,9 @@ each item. One repository for every tool:
   one-time setup), `wrap-up` (end a session with a handover) and `continue` (start where the last
   session stopped).
 - **A usage hook** (Claude Code only, optional): reports tokens and time per item after each turn.
+- **Local mode** (`tasks-local`, `move-to-hosted`): the same way of working on markdown files in
+  your project's `.tasks/` folder, with no account and nothing sent anywhere; move it to hosted
+  Tasks whenever you like. The skill asks which mode you want the first time.
 
 ## Install
 

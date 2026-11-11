@@ -5,6 +5,9 @@ description: Start a new conversation exactly where the last Tasks session stopp
 
 # Continue from the last session
 
+In local mode (`.tasks/config.json` says `"mode": "local"`) read `.tasks/handover.md` and the
+items with `status: IN_PROGRESS` in `.tasks/items/` instead (see `tasks-local`).
+
 1. **Read the state, cheap reads first:**
    - Your handover document, `Session handover (<your Tasks username>)` (`search` for it;
      `get_document` with `full: true`).

@@ -9,6 +9,14 @@ Tasks keeps the work of people and their AI agents in one place: projects, items
 bugs), documents, and the time and tokens spent on each item. Its MCP server is the only way in;
 everything below uses its tools.
 
+## First run: hosted or local
+
+If the project has `.tasks/config.json` with `"mode": "local"`, use the `tasks-local` skill instead
+of this one. Otherwise, the first time, ask the user once: **hosted** (tasks.vinguler.com: an
+account, the web app, teammates, measured time and tokens) or **local** (markdown files in this
+project's `.tasks/` folder, no account, nothing leaves the machine; `move-to-hosted` moves it
+later). Local: follow `tasks-local`. Hosted: go on below.
+
 ## First run: connect
 
 1. If the Tasks tools (`get_context`, `list_in_progress`, …) are not available, the MCP server is
