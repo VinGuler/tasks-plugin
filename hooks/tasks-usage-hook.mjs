@@ -489,10 +489,22 @@ export async function run(input, env = {}) {
             // advances the offset. A failed write keeps the batch as pending, like a failed POST.
             try {
               const file = path.join(home, 'usage.jsonl');
-              fs.appendFileSync(file, records.map((rec) => JSON.stringify(rec) + '\n').join(''), {
-                mode: 0o600,
-              });
-              fs.chmodSync(file, 0o600);
+              // O_NOFOLLOW refuses a planted symlink; fchmod before writing so a failed chmod
+              // cannot leave lines that the pending retry would append a second time.
+              const fd = fs.openSync(
+                file,
+                fs.constants.O_WRONLY |
+                  fs.constants.O_APPEND |
+                  fs.constants.O_CREAT |
+                  (fs.constants.O_NOFOLLOW || 0),
+                0o600
+              );
+              try {
+                fs.fchmodSync(fd, 0o600);
+                fs.writeSync(fd, records.map((rec) => JSON.stringify(rec) + '\n').join(''));
+              } finally {
+                fs.closeSync(fd);
+              }
               summary.sent += records.length;
               return true;
             } catch {
