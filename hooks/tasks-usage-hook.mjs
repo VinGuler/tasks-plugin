@@ -9,6 +9,9 @@
 // them into item segments from the `set_status` calls, adds the sub-agent files, and POSTs the
 // result to Tasks (POST /api/usage) with a report-only token.
 //
+// Local mode ("mode": "local" in config.json, no baseUrl/token): the same records are appended
+// as JSON lines to ~/.tasks/usage.jsonl (mode 600) instead of being POSTed; nothing leaves.
+//
 // Privacy: records are built from named numeric fields, ids, the model name, item keys and the
 // agent's self-chosen label. No message text, code, path, cwd or tool input ever leaves (only
 // `input.key(s)`/`input.status` of Tasks' status calls and `input.agent`, the label an agent
@@ -22,7 +25,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const VERSION = 4;
+export const VERSION = 5;
 
 const ITEM_KEY = /^[A-Z]{2,5}-\d+$/;
 const ID_RE = /^[A-Za-z0-9._:-]{1,100}$/;
@@ -456,7 +459,10 @@ export async function run(input, env = {}) {
     const cfg = readJson(path.join(home, 'config.json'));
     const sessionId = input && input.session_id;
     const transcript = input && input.transcript_path;
-    if (!cfg || !cfg.baseUrl || !cfg.token || !ID_RE.test(String(sessionId))) return summary;
+    // Local mode (DOC-60): records go to a file on this machine, nothing is sent anywhere.
+    const local = !!cfg && cfg.mode === 'local';
+    if (!cfg || !ID_RE.test(String(sessionId))) return summary;
+    if (!local && (!cfg.baseUrl || !cfg.token)) return summary;
     const event = input.hook_event_name;
     // The sub-agent's file lags its stop event by a few hundred ms.
     if (MID_TURN.has(event)) return summary;
@@ -478,6 +484,24 @@ export async function run(input, env = {}) {
 
         const flush = async (records, next) => {
           if (!records.length) return true;
+          if (local) {
+            // Same offset/dedupe state as hosted: a record is written once, in the run that
+            // advances the offset. A failed write keeps the batch as pending, like a failed POST.
+            try {
+              const file = path.join(home, 'usage.jsonl');
+              fs.appendFileSync(file, records.map((rec) => JSON.stringify(rec) + '\n').join(''), {
+                mode: 0o600,
+              });
+              fs.chmodSync(file, 0o600);
+              summary.sent += records.length;
+              return true;
+            } catch {
+              summary.error = 'write failed';
+              state.pending = { records, next };
+              writeJson(stateFile, state);
+              return false;
+            }
+          }
           const r = await postAll(cfg, records, fetchFn);
           summary.sent += r.stats.accepted;
           summary.duplicate += r.stats.duplicate;
