@@ -27,10 +27,10 @@ import { pathToFileURL } from 'node:url';
 
 export const VERSION = 5;
 
-const ITEM_KEY = /^[A-Z]{2,5}-\d+$/;
-const ID_RE = /^[A-Za-z0-9._:-]{1,100}$/;
-const MODEL_RE = /^[A-Za-z0-9._:@/[\]-]{1,100}$/;
-const STATUSES = new Set(['TODO', 'IN_PROGRESS', 'DONE']);
+export const ITEM_KEY = /^[A-Z]{2,5}-\d+$/;
+export const ID_RE = /^[A-Za-z0-9._:-]{1,100}$/;
+export const MODEL_RE = /^[A-Za-z0-9._:@/[\]-]{1,100}$/;
+export const STATUSES = new Set(['TODO', 'IN_PROGRESS', 'DONE']);
 const STATUS_TOOL = /^mcp__[A-Za-z0-9_-]+__set_status(_bulk)?$/;
 /** Tasks' MCP tools: their `agent` argument is the label the agent reports under. */
 const TASKS_TOOL_NAMES =
@@ -40,7 +40,7 @@ const SERVER_RE = /^[A-Za-z0-9_-]{1,64}$/;
 export const tasksToolRe = (server = 'tasks') =>
   new RegExp(`^mcp__${SERVER_RE.test(server) ? server : 'tasks'}__(${TASKS_TOOL_NAMES})$`);
 /** The server's label rule: one line, at most 100 characters. */
-const LABEL_RE = /^[^\p{Cc}\p{Cf}\u2028\u2029]{1,100}$/u;
+export const LABEL_RE = /^[^\p{Cc}\p{Cf}\u2028\u2029]{1,100}$/u;
 /** A sub-agent type from its .meta.json (`Explore`, `general-purpose`, a custom agent's name). */
 const AGENT_TYPE_RE = /^[A-Za-z0-9 ._:-]{1,40}$/;
 const MAX_TOKENS = 1_000_000_000;
@@ -311,7 +311,7 @@ export function buildRecords(requests, { sessionId, agentId = null, parentAgentI
 
 // --- files, state, network ---------------------------------------------------------------
 
-function readJson(file) {
+export function readJson(file) {
   try {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch {
@@ -319,7 +319,7 @@ function readJson(file) {
   }
 }
 
-function writeJson(file, value) {
+export function writeJson(file, value) {
   const tmp = `${file}.${process.pid}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(value), { mode: 0o600 });
   fs.renameSync(tmp, file);
@@ -339,13 +339,13 @@ function readFrom(file, offset) {
   return { buf, size, truncated: offset + len < size };
 }
 
-async function post(cfg, records, fetchFn) {
+export async function post(cfg, records, fetchFn, tool = 'claude-code') {
   try {
     const res = await fetchFn(`${cfg.baseUrl.replace(/\/+$/, '')}/api/usage`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${cfg.token}` },
       body: JSON.stringify({
-        tool: 'claude-code',
+        tool,
         ...(cfg.agent ? { agent: cfg.agent } : {}),
         records,
       }),
@@ -364,10 +364,10 @@ async function post(cfg, records, fetchFn) {
   }
 }
 
-async function postAll(cfg, records, fetchFn) {
+export async function postAll(cfg, records, fetchFn, tool = 'claude-code') {
   const stats = { accepted: 0, duplicate: 0, rejected: 0 };
   for (let i = 0; i < records.length; i += BATCH) {
-    const r = await post(cfg, records.slice(i, i + BATCH), fetchFn);
+    const r = await post(cfg, records.slice(i, i + BATCH), fetchFn, tool);
     if (!r.ok) return { ok: false, permanent: r.permanent, status: r.status, stats, sentUpTo: i };
     const d = r.result || {};
     stats.accepted += d.accepted || 0;
@@ -377,7 +377,41 @@ async function postAll(cfg, records, fetchFn) {
   return { ok: true, stats };
 }
 
-function withLock(file, fn, sleep) {
+/** Local mode: append records as JSON lines to <home>/usage.jsonl (mode 600). Throws on failure. */
+export function appendLocal(home, records) {
+  const file = path.join(home, 'usage.jsonl');
+  // O_NOFOLLOW refuses a planted symlink; fchmod before writing so a failed chmod
+  // cannot leave lines that a pending retry would append a second time.
+  const fd = fs.openSync(
+    file,
+    fs.constants.O_WRONLY |
+      fs.constants.O_APPEND |
+      fs.constants.O_CREAT |
+      (fs.constants.O_NOFOLLOW || 0),
+    0o600
+  );
+  try {
+    fs.fchmodSync(fd, 0o600);
+    fs.writeSync(fd, records.map((rec) => JSON.stringify(rec) + '\n').join(''));
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
+/** Last run only, no content: counts and an error class, for "why is nothing arriving?". */
+export function writeLastRun(home, now, summary) {
+  try {
+    writeJson(path.join(home, 'last-run.json'), {
+      at: new Date(now).toISOString(),
+      ...summary,
+      version: VERSION,
+    });
+  } catch {
+    /* nothing to do */
+  }
+}
+
+export function withLock(file, fn, sleep) {
   return (async () => {
     let held = false;
     for (let i = 0; i < 12 && !held; i++) {
@@ -488,23 +522,7 @@ export async function run(input, env = {}) {
             // Same offset/dedupe state as hosted: a record is written once, in the run that
             // advances the offset. A failed write keeps the batch as pending, like a failed POST.
             try {
-              const file = path.join(home, 'usage.jsonl');
-              // O_NOFOLLOW refuses a planted symlink; fchmod before writing so a failed chmod
-              // cannot leave lines that the pending retry would append a second time.
-              const fd = fs.openSync(
-                file,
-                fs.constants.O_WRONLY |
-                  fs.constants.O_APPEND |
-                  fs.constants.O_CREAT |
-                  (fs.constants.O_NOFOLLOW || 0),
-                0o600
-              );
-              try {
-                fs.fchmodSync(fd, 0o600);
-                fs.writeSync(fd, records.map((rec) => JSON.stringify(rec) + '\n').join(''));
-              } finally {
-                fs.closeSync(fd);
-              }
+              appendLocal(home, records);
               summary.sent += records.length;
               return true;
             } catch {
@@ -622,17 +640,11 @@ export async function run(input, env = {}) {
   } catch (err) {
     summary.error = String((err && err.message) || err).slice(0, 200);
   }
-  try {
-    const home2 = env.home || process.env.TASKS_HOME || path.join(os.homedir(), '.tasks');
-    // Last run only, no content: counts and an error class, for "why is nothing arriving?".
-    writeJson(path.join(home2, 'last-run.json'), {
-      at: new Date(now).toISOString(),
-      ...summary,
-      version: VERSION,
-    });
-  } catch {
-    /* nothing to do */
-  }
+  writeLastRun(
+    env.home || process.env.TASKS_HOME || path.join(os.homedir(), '.tasks'),
+    now,
+    summary
+  );
   return summary;
 }
 

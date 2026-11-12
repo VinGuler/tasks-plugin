@@ -10,7 +10,7 @@ each item. One repository for every tool:
 - **Skills** (`skills/`): `tasks-workflow` (how to work with items, notes and documents, and the
   one-time setup), `wrap-up` (end a session with a handover) and `continue` (start where the last
   session stopped).
-- **A usage hook** (Claude Code only, optional): reports tokens and time per item after each turn.
+- **A usage hook** (Claude Code and Codex, optional): reports tokens and time per item after each turn.
 - **Local mode** (`tasks-local`, `move-to-hosted`): the same way of working on markdown files in
   your project's `.tasks/` folder, with no account and nothing sent anywhere; move it to hosted
   Tasks whenever you like. The skill asks which mode you want the first time.
@@ -39,9 +39,22 @@ Then `/mcp auth tasks`.
 `https://tasks.vinguler.com/mcp` and leave the OAuth fields empty. Tasks registers the client
 itself; log in and Allow.
 
-**Codex, Cursor, VS Code (Copilot) and other MCP clients:** add an HTTP MCP server named `tasks`
-with the URL `https://tasks.vinguler.com/mcp` and log in when the tool asks. For example
-`codex mcp add tasks --url https://tasks.vinguler.com/mcp`, then `codex mcp login tasks`. Tools that
+**Codex**
+
+```sh
+codex mcp add tasks --url https://tasks.vinguler.com/mcp
+codex mcp login tasks
+```
+
+Usage reporting (optional): in Tasks, Settings, AI usage reporting, create an install command and
+run its Codex line (`… | node - --codex --url … --token …`). It adds the usage hook to
+`~/.codex/hooks.json`; trust it once in Codex with `/hooks`. The plugin also carries a Codex
+manifest (`.codex-plugin/plugin.json`, hooks in `hooks/codex-hooks.json`) for installing it as a
+Codex plugin; Codex runs a plugin's hooks only once you trust them, and its docs say only for
+plugins installed by hand in the desktop app, so the command above is the sure way.
+
+**Cursor, VS Code (Copilot) and other MCP clients:** add an HTTP MCP server named `tasks`
+with the URL `https://tasks.vinguler.com/mcp` and log in when the tool asks. Tools that
 read Agent Skills can use the `skills/` folders as they are; copy them where your tool looks for
 skills. These tools change their formats often: if a step here is out of date, their own MCP docs
 win.
@@ -49,11 +62,11 @@ win.
 ## Privacy
 
 The MCP connection reads and writes only what you ask your agent to do in Tasks, in the one
-workspace you chose. The usage hook reads the session transcript on your machine and sends **counts
-only**: token numbers, the model name, session and agent ids, the item keys of Tasks' own status
+workspace you chose. The usage hook reads the session transcript on your machine (in Codex: the
+token counts Codex hands its hooks) and sends **counts only**: token numbers, the model name, session and agent ids, the item keys of Tasks' own status
 calls and the label your agent gave itself. Never prompts, replies, code, file paths or tool output.
 It stores its token in `~/.tasks/config.json` (readable by you only) and its progress in
-`~/.tasks/state/`.
+`~/.tasks/state/` (Codex: `~/.tasks/codex/`).
 
 ## Versions
 

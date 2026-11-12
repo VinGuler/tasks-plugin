@@ -27,7 +27,7 @@ later). Local: follow `tasks-local`. Hosted: go on below.
      rest. No token to paste.
 2. Once connected, call `list_in_progress` to see where things stand.
 
-## First run: usage reporting (Claude Code only, optional)
+## First run: usage reporting (Claude Code and Codex, optional)
 
 The plugin's hook reports tokens and time per item, after each turn, without spending model tokens
 (counts, ids, model names and item keys only: never prompts, text, code, paths or tool output). It
@@ -40,6 +40,11 @@ does not exist and the user agrees:
    and make it readable by the user only (`chmod 600`). Never repeat the token in chat.
 3. On `status: "already_issued"`, the secret can't be shown again: the user revokes that token in
    Tasks (Settings, API tokens) and you call `setup_usage` again.
+
+In Codex, the plugin's hooks run only once the user trusts them (`/hooks`); if they don't run,
+the user installs them with the Codex line of the install command in Tasks' Settings (AI usage
+reporting). The config file is the same; leave `mcpServer` as above (Codex reads
+`codexMcpServer`, default `tasks`).
 
 If the user installed the hook earlier with the command from Tasks' Settings, they keep one of the
 two: the plugin's (the install command from Settings, with `--remove` instead of `--token`, takes
