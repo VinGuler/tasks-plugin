@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- README: install, update and remove steps for the supported tools only (Claude Code, Codex CLI,
+  Antigravity CLI), tested on Linux; what each tool gets (MCP, skills, usage hook); local mode.
+  Cursor, VS Code and the claude.ai / ChatGPT connectors are no longer listed: they didn't work
+  well enough yet.
+
 ## 0.2.0 (2026-11-12)
 
 - Codex: a usage hook (`hooks/codex-usage-hook.mjs`, v1) on Codex's own hook events: token counts

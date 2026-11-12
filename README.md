@@ -2,62 +2,80 @@
 
 Connects your AI tool to [Tasks](https://tasks.vinguler.com), a place where people and their AI
 agents keep their work: projects, items, documents, resume cards, and the time and tokens spent on
-each item. One repository for every tool:
+each item. Each person can use a different tool. Everyone shares one workspace and picks up each
+other's work.
 
-- **The MCP server** `https://tasks.vinguler.com/mcp`. You log in (or sign up) in the browser the
-  first time; no token to paste. You choose the workspace the connection may act in, and you can
-  revoke it any time in Tasks, Settings, API tokens.
-- **Skills** (`skills/`): `tasks-workflow` (how to work with items, notes and documents, and the
-  one-time setup), `wrap-up` (end a session with a handover) and `continue` (start where the last
-  session stopped).
-- **A usage hook** (Claude Code and Codex, optional): reports tokens and time per item after each turn.
-- **Local mode** (`tasks-local`, `move-to-hosted`): the same way of working on markdown files in
-  your project's `.tasks/` folder, with no account and nothing sent anywhere; move it to hosted
-  Tasks whenever you like. The skill asks which mode you want the first time.
+**Supported tools:** Claude Code (CLI and the Claude desktop app), Codex CLI and Antigravity CLI
+(`agy`). The commands below are for Linux and macOS.
+
+## What you get
+
+| | Claude Code | Codex CLI | Antigravity CLI |
+| --- | --- | --- | --- |
+| Tasks MCP server (browser log-in, no token to paste) | yes | yes | yes |
+| Skills: `tasks-workflow`, `wrap-up`, `continue`, `tasks-local`, `move-to-hosted` | yes | yes | yes |
+| Usage hook (tokens and time per item, optional) | yes | yes, once you trust it | no |
+
+The first time you log in, you choose the workspace the connection may act in. You can revoke it
+any time in Tasks, under Settings › API tokens. The first time you work with Tasks, the
+`tasks-workflow` skill asks whether you want hosted Tasks or local mode (below). In Claude Code
+and Codex it also offers to set up the usage hook.
 
 ## Install
 
-**Claude Code**
+### Claude Code
 
 ```sh
 claude plugin marketplace add VinGuler/tasks-plugin
 claude plugin install tasks@vinguler
 ```
 
-Then `/mcp`, pick `plugin:tasks:tasks`, Authenticate. The first time you work with Tasks, the
-`tasks-workflow` skill offers to set up the usage hook.
+Then in a session, run `/mcp`, pick `plugin:tasks:tasks` and choose **Authenticate**.
 
-**Gemini CLI, Antigravity**
+The Claude desktop app uses the same Claude Code setup, so its Code sessions get the plugin too.
 
-```sh
-gemini extensions install https://github.com/VinGuler/tasks-plugin
-```
+Update: `claude plugin marketplace update vinguler && claude plugin update tasks@vinguler`.
+Remove: `claude plugin uninstall tasks@vinguler && claude plugin marketplace remove vinguler`.
 
-Then `/mcp auth tasks`.
+### Codex CLI
 
-**claude.ai, ChatGPT, Grok** (custom connector): add a connector with the URL
-`https://tasks.vinguler.com/mcp` and leave the OAuth fields empty. Tasks registers the client
-itself; log in and Allow.
-
-**Codex**
+Add this repository as a plugin marketplace, then install the plugin from it:
 
 ```sh
-codex mcp add tasks --url https://tasks.vinguler.com/mcp
+codex plugin marketplace add VinGuler/tasks-plugin
+codex plugin add tasks@vinguler
 codex mcp login tasks
 ```
 
-Usage reporting (optional): in Tasks, Settings, AI usage reporting, create an install command and
-run its Codex line (`… | node - --codex --url … --token …`). It adds the usage hook to
-`~/.codex/hooks.json`; trust it once in Codex with `/hooks`. The plugin also carries a Codex
-manifest (`.codex-plugin/plugin.json`, hooks in `hooks/codex-hooks.json`) for installing it as a
-Codex plugin; Codex runs a plugin's hooks only once you trust them, and its docs say only for
-plugins installed by hand in the desktop app, so the command above is the sure way.
+The last line opens the browser log-in. Start a new Codex session afterwards.
 
-**Cursor, VS Code (Copilot) and other MCP clients:** add an HTTP MCP server named `tasks`
-with the URL `https://tasks.vinguler.com/mcp` and log in when the tool asks. Tools that
-read Agent Skills can use the `skills/` folders as they are; copy them where your tool looks for
-skills. These tools change their formats often: if a step here is out of date, their own MCP docs
-win.
+Codex runs a plugin's hooks only after you trust them, so to get the usage hook, run `/hooks` in
+Codex once and trust it.
+
+Update: `codex plugin marketplace upgrade vinguler && codex plugin add tasks@vinguler`.
+Remove: `codex plugin remove tasks@vinguler && codex plugin marketplace remove vinguler`.
+
+### Antigravity CLI (agy)
+
+```sh
+agy plugin install https://github.com/VinGuler/tasks-plugin
+```
+
+Then in a session, run `/mcp`, pick the `tasks` server (it shows as needing a log-in) and
+authenticate.
+
+Update: run the install line again. Remove: `agy plugin uninstall tasks`.
+
+## Local mode (no account)
+
+The `tasks-local` skill gives you the same way of working, kept as markdown files in your project's
+`.tasks/` folder: items, statuses, resume cards, notes, documents and the handover. Nothing is sent
+anywhere. Choose it when the `tasks-workflow` skill asks.
+
+- It needs a tool that can read and write files in your project. All three tools above can.
+- There is no web app, no teammates and no measured time or tokens.
+- The MCP server stays configured but unused, so you can skip its log-in.
+- Move to hosted Tasks any time with the `move-to-hosted` skill.
 
 ## Privacy
 
