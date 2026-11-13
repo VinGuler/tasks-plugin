@@ -91,6 +91,13 @@ anywhere. Choose it when the `tasks-workflow` skill asks.
 - The MCP server stays configured but unused, so you can skip its log-in.
 - Move to hosted Tasks any time with the `move-to-hosted` skill.
 
+## Updating
+
+Updates are pull, not push: nothing changes on your machine until you run the update command for
+your tool (listed under each tool above). When you do, you get whatever version is on `main`. See
+[CHANGELOG.md](CHANGELOG.md) for what changed. After a Codex update that touched the hooks, `/hooks`
+asks you to trust them again.
+
 ## Privacy
 
 The MCP connection reads and writes only what you ask your agent to do in Tasks, in the one
