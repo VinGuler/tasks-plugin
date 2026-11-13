@@ -1,11 +1,19 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 (2026-11-13)
 
+- Antigravity (agy): a native plugin (`.antigravity-plugin/plugin.json`, `mcp_config.json`,
+  `rules/AGENTS.md`) and a usage hook (`hooks/agy-usage-hook.mjs`, v1, from `hooks.json`). It runs
+  at the end of each turn, reads the token counts and Tasks' status calls from agy's transcript,
+  and sends counts only.
+- The Gemini CLI extension files are gone (`gemini-extension.json`, `GEMINI.md`): agy installs the
+  native plugin instead.
 - README: install, update and remove steps for the supported tools only (Claude Code, Codex CLI,
-  Antigravity CLI), tested on Linux; what each tool gets (MCP, skills, usage hook); local mode.
-  Cursor, VS Code and the claude.ai / ChatGPT connectors are no longer listed: they didn't work
-  well enough yet.
+  Antigravity CLI), tested on Linux; what gets installed per tool, the trust step (Codex) and what
+  the hooks send. Cursor, VS Code and the claude.ai / ChatGPT connectors are no longer listed.
+- `AGENTS.md` (with `CLAUDE.md` importing it): install steps for an AI tool asked to install the
+  plugin, per tool, with what only the user can do (log in, trust).
+- `tasks-workflow`: usage setup for all three tools.
 
 ## 0.2.0 (2026-11-12)
 

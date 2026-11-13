@@ -8,31 +8,43 @@ other's work.
 **Supported tools:** Claude Code (CLI and the Claude desktop app), Codex CLI and Antigravity CLI
 (`agy`). The commands below are for Linux and macOS.
 
-## What you get
+## What gets installed
 
 | | Claude Code | Codex CLI | Antigravity CLI |
 | --- | --- | --- | --- |
-| Tasks MCP server (browser log-in, no token to paste) | yes | yes | yes |
-| Skills: `tasks-workflow`, `wrap-up`, `continue`, `tasks-local`, `move-to-hosted` | yes | yes | yes |
-| Usage hook (tokens and time per item, optional) | yes | yes, once you trust it | no |
+| **Tasks MCP server** `https://tasks.vinguler.com/mcp`: items, notes, documents, roadmap. Browser log-in, no token to paste | `.mcp.json` | `.mcp.json` | `mcp_config.json` |
+| **Skills**: `tasks-workflow`, `wrap-up`, `continue`, `tasks-local`, `move-to-hosted` | `skills/` | `skills/` | `skills/` |
+| **Rules**: a short note telling the agent to use the skills | none | none | `rules/AGENTS.md` |
+| **Usage hook** (optional): tokens and time per item, sent after each turn | `hooks/hooks.json`: runs as installed | `hooks/codex-hooks.json`: runs once you trust it | `hooks.json`: runs as installed |
+
+Nothing else is installed. The hooks are small Node scripts in `hooks/` (Node 18 or newer). They
+do nothing until the `tasks-workflow` skill has set up usage reporting with your agreement. That
+writes one report-only token to `~/.tasks/config.json`, readable by you only. What the hooks read
+and send: [Privacy](#privacy).
 
 The first time you log in, you choose the workspace the connection may act in. You can revoke it
 any time in Tasks, under Settings › API tokens. The first time you work with Tasks, the
-`tasks-workflow` skill asks whether you want hosted Tasks or local mode (below). In Claude Code
-and Codex it also offers to set up the usage hook.
+`tasks-workflow` skill asks whether you want hosted Tasks or local mode (below), then offers to set
+up usage reporting.
 
 ## Install
 
-### Claude Code
+Each tool's install is two or three commands, then one log-in in your browser. If you'd rather
+let your AI tool do it, open this repository in it (or give it the link) and ask it to install the
+plugin: [AGENTS.md](AGENTS.md) tells it the steps for its own tool.
+
+### Claude Code (CLI and the Claude desktop app)
 
 ```sh
 claude plugin marketplace add VinGuler/tasks-plugin
 claude plugin install tasks@vinguler
 ```
 
-Then in a session, run `/mcp`, pick `plugin:tasks:tasks` and choose **Authenticate**.
+1. Start a new session, run `/mcp`, pick `plugin:tasks:tasks` and choose **Authenticate**.
+2. Log in or sign up in the browser, pick the workspace and **Allow**.
 
-The Claude desktop app uses the same Claude Code setup, so its Code sessions get the plugin too.
+There is nothing to trust: Claude Code runs a plugin's hooks as installed. The Claude desktop
+app's Code sessions use the same setup, so they get the plugin too.
 
 Update: `claude plugin marketplace update vinguler && claude plugin update tasks@vinguler`.
 Remove: `claude plugin uninstall tasks@vinguler && claude plugin marketplace remove vinguler`.
@@ -47,12 +59,12 @@ codex plugin add tasks@vinguler
 codex mcp login tasks
 ```
 
-The last line opens the browser log-in. Start a new Codex session afterwards.
+1. The last line opens the browser log-in: log in or sign up, pick the workspace and **Allow**.
+2. Start a new Codex session and run `/hooks`. Trust the Tasks hooks (`codex-hooks.json`): Codex
+   runs a plugin's hooks only after you trust them. Skip this if you don't want usage reporting.
 
-Codex runs a plugin's hooks only after you trust them, so to get the usage hook, run `/hooks` in
-Codex once and trust it.
-
-Update: `codex plugin marketplace upgrade vinguler && codex plugin add tasks@vinguler`.
+Update: `codex plugin marketplace upgrade vinguler && codex plugin add tasks@vinguler`. After an
+update, `/hooks` asks you to trust the hooks again if they changed.
 Remove: `codex plugin remove tasks@vinguler && codex plugin marketplace remove vinguler`.
 
 ### Antigravity CLI (agy)
@@ -61,8 +73,10 @@ Remove: `codex plugin remove tasks@vinguler && codex plugin marketplace remove v
 agy plugin install https://github.com/VinGuler/tasks-plugin
 ```
 
-Then in a session, run `/mcp`, pick the `tasks` server (it shows as needing a log-in) and
-authenticate.
+1. Start a session, run `/mcp`, pick `tasks` (it shows as needing a log-in) and sign in.
+2. Log in or sign up in the browser, pick the workspace and **Allow**.
+
+There is nothing to trust: the hook runs at the end of each turn, and `/hooks` lists it.
 
 Update: run the install line again. Remove: `agy plugin uninstall tasks`.
 
@@ -81,10 +95,11 @@ anywhere. Choose it when the `tasks-workflow` skill asks.
 
 The MCP connection reads and writes only what you ask your agent to do in Tasks, in the one
 workspace you chose. The usage hook reads the session transcript on your machine (in Codex: the
-token counts Codex hands its hooks) and sends **counts only**: token numbers, the model name, session and agent ids, the item keys of Tasks' own status
+token counts Codex hands its hooks; in Antigravity: the token counts of its transcript) and sends
+**counts only**: token numbers, the model name, session and agent ids, the item keys of Tasks' own status
 calls and the label your agent gave itself. Never prompts, replies, code, file paths or tool output.
 It stores its token in `~/.tasks/config.json` (readable by you only) and its progress in
-`~/.tasks/state/` (Codex: `~/.tasks/codex/`).
+`~/.tasks/state/` (Codex: `~/.tasks/codex/`, Antigravity: `~/.tasks/agy/`).
 
 ## Versions
 

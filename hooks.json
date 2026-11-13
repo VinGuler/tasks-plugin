@@ -1,0 +1,11 @@
+{
+  "tasks-usage": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node ./hooks/agy-usage-hook.mjs",
+        "timeout": 30
+      }
+    ]
+  }
+}

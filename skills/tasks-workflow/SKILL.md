@@ -27,7 +27,7 @@ later). Local: follow `tasks-local`. Hosted: go on below.
      rest. No token to paste.
 2. Once connected, call `list_in_progress` to see where things stand.
 
-## First run: usage reporting (Claude Code and Codex, optional)
+## First run: usage reporting (Claude Code, Codex and Antigravity, optional)
 
 The plugin's hook reports tokens and time per item, after each turn, without spending model tokens
 (counts, ids, model names and item keys only: never prompts, text, code, paths or tool output). It
@@ -41,10 +41,10 @@ does not exist and the user agrees:
 3. On `status: "already_issued"`, the secret can't be shown again: the user revokes that token in
    Tasks (Settings, API tokens) and you call `setup_usage` again.
 
-In Codex, the plugin's hooks run only once the user trusts them (`/hooks`); if they don't run,
-the user installs them with the Codex line of the install command in Tasks' Settings (AI usage
-reporting). The config file is the same; leave `mcpServer` as above (Codex reads
-`codexMcpServer`, default `tasks`).
+All three tools read the same config file; leave `mcpServer` as above (Codex reads
+`codexMcpServer`, Antigravity `agyMcpServer`, both default `tasks`). In Codex, the plugin's hooks
+run only once the user trusts them: tell them to run `/hooks` in Codex and trust the Tasks hooks.
+In Antigravity the hook runs at the end of each turn with nothing to trust (`/hooks` lists it).
 
 If the user installed the hook earlier with the command from Tasks' Settings, they keep one of the
 two: the plugin's (the install command from Settings, with `--remove` instead of `--token`, takes

@@ -1,6 +1,6 @@
 {
   "name": "tasks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Connects Codex to Tasks (tasks.vinguler.com): the MCP server with a browser log-in, the lean way of working with items and resume cards, handover and continue, and a usage hook.",
   "author": { "name": "VinGuler", "url": "https://github.com/VinGuler" },
   "homepage": "https://tasks.vinguler.com",
