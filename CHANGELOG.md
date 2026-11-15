@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 (unreleased: ships with Tasks' Settings › Import)
+
+- `move-to-local` (new): take a hosted workspace local. Every Tasks export (Settings › Export)
+  now carries the workspace as a `.tasks/` folder; the skill copies it into the project after
+  checking it doesn't overwrite one.
+- `move-to-hosted`: the first choice is now an archive: zip `.tasks/` and import it into a new
+  workspace (Settings › Import), which keeps keys, notes, resume cards, documents and the roadmap
+  in one step. The item-by-item MCP copy stays for joining a workspace that has data.
+- `tasks-local`: documents may sit in folders under `docs/`; an optional `roadmap.md`; optional
+  `assignee`, note authors and `Next:`/`Blockers:` lines in Resume, so files from and to hosted
+  Tasks keep them.
+
 ## 0.3.0 (2026-11-13)
 
 - Antigravity (agy): a native plugin (`.antigravity-plugin/plugin.json`, `mcp_config.json`,

@@ -1,9 +1,29 @@
 ---
 name: move-to-hosted
-description: Move a project from Tasks local mode (markdown in `.tasks/`) to hosted Tasks (tasks.vinguler.com) — connects the MCP server, then recreates the projects, documents and items with their notes and resume cards, keeping the old keys in the notes. Use when the user says "move to hosted", "upload my local tasks", "switch from local to Tasks online".
+description: Move a project from Tasks local mode (markdown in `.tasks/`) to hosted Tasks (tasks.vinguler.com) — zips `.tasks/` for Settings › Import, which creates a new workspace with every project, item, note, document and the roadmap in one step; or, into an existing workspace, recreates them over the MCP server. Use when the user says "move to hosted", "upload my local tasks", "switch from local to Tasks online".
 ---
 
 # Move local Tasks to hosted Tasks
+
+## The archive (a new workspace, everything at once)
+
+1. **Pack:** from the project root, zip the folder itself so the zip holds `.tasks/…`:
+   `zip -r tasks-local.zip .tasks` (on Windows: right-click `.tasks` › Compress). Nothing is
+   deleted locally.
+2. **Import:** the user signs in to Tasks and opens Settings › Import, chooses the zip, reads the
+   preview (projects, items, documents, roadmap entries, what is skipped) and presses
+   "Create workspace". Tasks keeps the keys (`APP-3`), notes, resume cards, documents and their
+   links. You can't do this step: an import needs a signed-in person, not the MCP token.
+3. **Connect:** the Tasks MCP tools must point at the new workspace (see `tasks-workflow`, "First
+   run: connect"; the grant the user approves picks the workspace).
+4. **Finish:** set `"mode": "hosted"` in `.tasks/config.json`, offer the usage setup of
+   `tasks-workflow`, and suggest removing `.tasks/items` and `.tasks/docs` once the user has
+   checked Tasks.
+
+## Into an existing workspace (the MCP copy)
+
+Use this only when the work must join a workspace that already has data (an import always
+creates a new one). It is slower and doesn't keep the old keys.
 
 1. **Connect:** the Tasks MCP tools must be available (see `tasks-workflow`, "First run:
    connect"). Ask the user which workspace to use; the grant they approve decides it.

@@ -57,9 +57,10 @@ Be accurate, and say no more than this:
 
 - **The Tasks MCP server** (`https://tasks.vinguler.com/mcp`): your agent reads and writes items,
   notes and documents in the one workspace the user chose.
-- **Five skills:** `tasks-workflow` (how to work with Tasks, and the first-run setup), `wrap-up`
+- **Six skills:** `tasks-workflow` (how to work with Tasks, and the first-run setup), `wrap-up`
   (end a session with a handover), `continue` (resume one), `tasks-local` (the same way of working
-  in local markdown files, no account), `move-to-hosted` (move local work into Tasks).
+  in local markdown files, no account), `move-to-hosted` (move local work into Tasks) and
+  `move-to-local` (take a Tasks export local).
 - **A usage hook** (optional): after each turn it sends token counts and time per item. It never
   sends prompts, replies, code, file paths or tool output. It does nothing until the user agrees
   to set it up (the `tasks-workflow` skill asks on first use).
