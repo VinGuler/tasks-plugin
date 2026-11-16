@@ -43,7 +43,8 @@ does not exist and the user agrees:
 
 All three tools read the same config file; leave `mcpServer` as above (Codex reads
 `codexMcpServer`, Antigravity `agyMcpServer`, both default `tasks`). In Codex, the plugin's hooks
-run only once the user trusts them: tell them to run `/hooks` in Codex and trust the Tasks hooks.
+run only once the user trusts them: tell them to run `/hooks` in Codex and trust the Tasks hooks,
+again after every plugin update (Codex skips them silently until then).
 In Antigravity the hook runs at the end of each turn with nothing to trust (`/hooks` lists it).
 
 If the user installed the hook earlier with the command from Tasks' Settings, they keep one of the

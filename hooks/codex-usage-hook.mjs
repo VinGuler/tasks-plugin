@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Tasks usage reporter for Codex (DOC-41 "Codex adapter design", roadmap #18). Runs from Codex's
-// hooks, async where it can be, outside the model: zero model tokens, prints nothing (empty
-// stdout is what every Codex hook event requires) and always exits 0.
+// hooks, outside the model: zero model tokens, prints nothing (empty stdout is what every Codex
+// hook event requires) and always exits 0. Only Stop runs async: `codex exec` kills async hooks
+// when it exits, so the spool write stays synchronous (TSK-189).
 //
 // PostModelRequest: appends the request's token counts to a spool, ~/.tasks/codex/<session>.jsonl.
 // PostToolUse (Tasks' MCP tools only): follows which item the session works on and under which
