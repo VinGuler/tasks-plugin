@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (unreleased: ships with Tasks' Settings › Import)
+## 0.4.0 (2026-11-16)
 
 - `move-to-local` (new): take a hosted workspace local. Every Tasks export (Settings › Export)
   now carries the workspace as a `.tasks/` folder; the skill copies it into the project after
