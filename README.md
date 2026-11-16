@@ -64,7 +64,8 @@ codex mcp login tasks
    runs a plugin's hooks only after you trust them. Skip this if you don't want usage reporting.
 
 Update: `codex plugin marketplace upgrade vinguler && codex plugin add tasks@vinguler`. After an
-update, `/hooks` asks you to trust the hooks again if they changed.
+update, run `/hooks` and trust the Tasks hooks again: Codex marks them modified after every plugin
+update, even when the hook files didn't change, and skips them silently until you do.
 Remove: `codex plugin remove tasks@vinguler && codex plugin marketplace remove vinguler`.
 
 ### Antigravity CLI (agy)
@@ -98,8 +99,8 @@ anywhere. Choose it when the `tasks-workflow` skill asks.
 
 Updates are pull, not push: nothing changes on your machine until you run the update command for
 your tool (listed under each tool above). When you do, you get whatever version is on `main`. See
-[CHANGELOG.md](CHANGELOG.md) for what changed. After a Codex update that touched the hooks, `/hooks`
-asks you to trust them again.
+[CHANGELOG.md](CHANGELOG.md) for what changed. In Codex, trust the hooks again in `/hooks` after
+every update: until then Codex skips them and no usage reaches Tasks.
 
 ## Privacy
 

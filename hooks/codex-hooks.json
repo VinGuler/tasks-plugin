@@ -6,8 +6,7 @@
           {
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/hooks/codex-usage-hook.mjs\"",
-            "async": true,
-            "timeout": 30
+            "timeout": 5
           }
         ]
       }

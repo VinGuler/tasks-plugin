@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.1 (2026-11-16)
+
+- Codex: the usage hook's `PostModelRequest` runs synchronously (timeout 5 s). As an async hook it
+  was killed when `codex exec` exited, so every run lost its last model request (a one-request run
+  recorded nothing). It only appends one line to the spool; sending stays on `Stop`.
+- Codex trust: Codex marks the plugin's hooks modified after **every** plugin update, even when the
+  hook files are unchanged, and skips them silently until you trust them again in `/hooks`. The
+  README, `AGENTS.md` and `tasks-workflow` now say so. After updating to 0.4.1, run `/hooks` once.
+
 ## 0.4.0 (2026-11-16)
 
 - `move-to-local` (new): take a hosted workspace local. Every Tasks export (Settings › Export)

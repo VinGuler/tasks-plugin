@@ -48,8 +48,8 @@ You can't complete these yourself. Tell the user exactly this, for their tool:
   - Codex: run `codex mcp login tasks`, then start a new session.
   - Antigravity: start a session, run `/mcp`, pick `tasks`, sign in.
 - **Trust the hooks** (Codex only, optional): run `/hooks` in Codex and trust the Tasks hooks.
-  Without it everything works except usage reporting. Claude Code and Antigravity run plugin
-  hooks without a trust step.
+  Without it everything works except usage reporting. Codex asks again after every plugin
+  update. Claude Code and Antigravity run plugin hooks without a trust step.
 
 ## 4. Explain what was installed
 
