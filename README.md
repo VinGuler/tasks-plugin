@@ -13,7 +13,7 @@ other's work.
 | | Claude Code | Codex CLI | Antigravity CLI |
 | --- | --- | --- | --- |
 | **Tasks MCP server** `https://tasks.vinguler.com/mcp`: items, notes, documents, roadmap. Browser log-in, no token to paste | `.mcp.json` | `.mcp.json` | `mcp_config.json` |
-| **Skills**: `tasks-workflow`, `wrap-up`, `continue`, `tasks-local`, `move-to-hosted` | `skills/` | `skills/` | `skills/` |
+| **Skills**: `tasks-workflow`, `wrap-up`, `continue`, `tasks-local`, `move-to-hosted`, `move-to-local` | `skills/` | `skills/` | `skills/` |
 | **Rules**: a short note telling the agent to use the skills | none | none | `rules/AGENTS.md` |
 | **Usage hook** (optional): tokens and time per item, sent after each turn | `hooks/hooks.json`: runs as installed | `hooks/codex-hooks.json`: runs once you trust it | `hooks.json`: runs as installed |
 
@@ -89,7 +89,10 @@ anywhere. Choose it when the `tasks-workflow` skill asks.
 - It needs a tool that can read and write files in your project. All three tools above can.
 - There is no web app, no teammates and no measured time or tokens.
 - The MCP server stays configured but unused, so you can skip its log-in.
-- Move to hosted Tasks any time with the `move-to-hosted` skill.
+- Move to hosted Tasks any time with the `move-to-hosted` skill: zip `.tasks/` and import it into a
+  new workspace (Settings › Import).
+- Take a hosted workspace local with the `move-to-local` skill: every export (Settings › Export)
+  carries the workspace as a `.tasks/` folder.
 
 ## Updating
 

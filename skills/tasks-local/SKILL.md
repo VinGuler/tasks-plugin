@@ -16,9 +16,13 @@ milestones, status that tells the truth.
 .tasks/
   config.json            {"mode": "local", "projects": {"APP": {"name": "My app", "next": 4}}}
   items/APP-1.md         one file per item
-  docs/<slug>.md         one file per document
+  docs/<slug>.md         one file per document (folders allowed: docs/plans/<slug>.md)
+  roadmap.md             optional: what's planned, in order
   handover.md            the session handover (wrap-up / continue)
 ```
+
+A `.tasks/` folder can also come from hosted Tasks: every export (Settings › Export) carries the
+workspace in this layout, and the `move-to-local` skill copies it into the project.
 
 **First use:** create `.tasks/config.json` with one project: ask the user for a short key (2-5
 capital letters) and a name. Suggest adding `.tasks/` to version control; it is plain text.
@@ -48,8 +52,18 @@ Where it stopped and the exact next step.
 - 2026-11-11 10:05 — what was done, decisions, commits (at most 600 characters each)
 ```
 
-**A document** (`docs/<slug>.md`): front matter `title`, `status` (`draft` or `approved`) and
-`summary` (2-3 sentences, kept current), then the content. An epic needs an approved document.
+Optional front matter: `assignee` (a teammate's username or `agent:<label>`), and in an export
+`started`/`done` as full timestamps. A note may name who wrote it: `- <time> — dana: text`. In the
+Resume section, lines starting `Next:` and `Blockers:` are kept apart from the state when the files
+go back to hosted Tasks.
+
+**A document** (`docs/<slug>.md`, or in a subfolder): front matter `title`, `status` (`draft` or
+`approved`) and `summary` (2-3 sentences, kept current), then the content. An epic needs an
+approved document. Documents from hosted Tasks also carry their `key` (`DOC-12`).
+
+**The roadmap** (`roadmap.md`, optional): one `## #<n> <title>` heading per entry, in order, with
+`- status: PLANNED` (`IN_PROGRESS`, `DONE`, `ON_HOLD`), optional `- epic: APP-1` and
+`- document: <slug>` lines, then a short note.
 
 ## The habits, in files
 
@@ -67,5 +81,5 @@ Where it stopped and the exact next step.
 
 ## Moving to hosted Tasks later
 
-The `move-to-hosted` skill connects the Tasks MCP server and copies these files into a Tasks
-workspace.
+The `move-to-hosted` skill does it: zip `.tasks/` and import it into a new workspace in Tasks
+(Settings › Import), which keeps every item, note and document in one step.
