@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Tasks usage reporter for Claude Code (DOC-41, roadmap #18). Runs from the stop hooks, async
+// Tasks usage reporter for Claude Code. Runs from the stop hooks, async
 // and outside the model: it costs zero model tokens, prints nothing, never blocks the session
 // and always exits 0.
 //
@@ -57,7 +57,7 @@ const SPAWNS_KEEP = 500;
 const ASSISTANT = Buffer.from('"type":"assistant"');
 
 /**
- * Installs before v4 also ran on these for the Live page's heartbeats (removed, roadmap #42).
+ * Installs before v4 also ran on these for the Live page's heartbeats (since removed).
  * Until the installer is re-run they still fire: nothing to do on them.
  */
 const MID_TURN = new Set(['SessionStart', 'UserPromptSubmit', 'SubagentStart', 'PostToolUse']);
@@ -493,7 +493,7 @@ export async function run(input, env = {}) {
     const cfg = readJson(path.join(home, 'config.json'));
     const sessionId = input && input.session_id;
     const transcript = input && input.transcript_path;
-    // Local mode (DOC-60): records go to a file on this machine, nothing is sent anywhere.
+    // Local mode: records go to a file on this machine, nothing is sent anywhere.
     const local = !!cfg && cfg.mode === 'local';
     if (!cfg || !ID_RE.test(String(sessionId))) return summary;
     if (!local && (!cfg.baseUrl || !cfg.token)) return summary;
