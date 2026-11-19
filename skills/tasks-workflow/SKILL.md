@@ -51,6 +51,23 @@ If the user installed the hook earlier with the command from Tasks' Settings, th
 two: the plugin's (the install command from Settings, with `--remove` instead of `--token`, takes
 the old one away) or the old one.
 
+## The cycle
+
+New work goes through the full cycle, each step written down in Tasks, so anyone can follow it:
+
+1. **Roadmap item:** what and why in a line (`get_roadmap`, `set_roadmap_item`), linked to its
+   document once there is one.
+2. **Document:** the plan: why, scope, open questions (`create_document`). Ask the user to approve
+   it; don't build an epic on a draft.
+3. **Epic and tasks:** `create_epic` with the approved document in `documents` and its tasks,
+   each small enough for one change. Link the epic to the roadmap item (`set_roadmap_item`): from
+   then on the epic drives the roadmap item's status.
+4. **Work the tasks:** the way of working below, one task at a time.
+5. **Done:** each task `DONE` with what changed (commits) in a note; the epic and its roadmap item
+   follow.
+
+Small fixes skip to step 4 (a task or a bug may stand alone).
+
 ## The way of working
 
 - **Start with `get_context(key)`** for an item: resume card, epic, linked document summaries, the

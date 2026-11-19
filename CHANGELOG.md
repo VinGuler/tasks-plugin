@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 (2026-11-19)
+
+- README rewritten for people meeting the plugin for the first time: the cycle it gives your agent
+  (roadmap item → document → epic → tasks → done), an example session, a three-step quick start,
+  example prompts, the words it uses, hosted or local, privacy and permissions, and a FAQ.
+- `tasks-workflow`: a new "The cycle" section walks the agent through roadmap item, document
+  (approved by you), epic and tasks, the work, and done.
+- `SECURITY.md` (how to report a problem; what the plugin runs on your machine) and
+  `CONTRIBUTING.md`.
+- The three manifests share one description and keyword list.
+- Hook comments no longer cite our internal tickets. No behaviour change.
+
 ## 0.4.1 (2026-11-16)
 
 - Codex: the usage hook's `PostModelRequest` runs synchronously (timeout 5 s). As an async hook it
