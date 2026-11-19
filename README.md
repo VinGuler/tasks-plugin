@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/tasks-logo.png" width="80" height="80" alt="Tasks logo"></p>
+
 # Tasks: a documented development cycle for your AI agent
 
 [![License: MIT](https://img.shields.io/github/license/VinGuler/tasks-plugin)](LICENSE)
