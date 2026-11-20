@@ -103,7 +103,7 @@ install the plugin. [AGENTS.md](AGENTS.md) tells it the steps for its own tool.
 
 | | Hosted (tasks.vinguler.com) | Local (`.tasks/` markdown) |
 | --- | --- | --- |
-| Account | Yes (free to start) | None |
+| Account | Yes (free) | None |
 | Web app: board, roadmap, documents, activity | Yes | No: you read the files |
 | Teammates and other tools on the same work | Yes | Through your repository, if you commit `.tasks/` |
 | Time and tokens per item | Yes, with the usage hook | No |
@@ -215,8 +215,8 @@ and, only if you agree, usage counts. Never your code, prompts or file paths. Se
 **What can my agent change?** Items, notes and documents in the one workspace you chose at sign-in.
 Nothing outside it, and you can revoke the access at any time.
 
-**What does it cost?** The plugin is free and MIT-licensed. Local mode is free. Hosted Tasks has a
-free plan.
+**What does it cost?** Nothing. Tasks is a free hobby project, with no paid plans: the plugin
+(MIT-licensed), local mode and hosted Tasks alike.
 
 **Which tools does it support?** Claude Code (CLI and desktop app), Codex CLI and Antigravity CLI,
 on Linux and macOS. Others aren't supported yet.
