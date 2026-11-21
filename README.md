@@ -24,26 +24,30 @@ their work, or with plain markdown files in your project (local mode, no account
 
 You ask for a feature; the agent runs the whole cycle in Tasks:
 
+<p align="center"><img src="assets/demo.gif" width="960" alt="The agent adds CSV export to the roadmap, writes a document the person approves, creates an epic with three tasks, moves them across the board with notes and a resume card, and the roadmap shows it done"></p>
+
 ```text
 You:   Plan CSV export for reports, then build it.
 
 Agent: Added "CSV export" to the roadmap.
-       Wrote DOC-14 "CSV export": why, scope, the open question on date formats. Please approve it.
+       Wrote DOC-11 "CSV export": why, scope, the open question on date formats. Please approve it.
 You:   Approved. Use ISO dates.
-Agent: Created epic REP-20 with three tasks: REP-21 export endpoint, REP-22 download button,
-       REP-23 tests. Starting REP-21.
+Agent: Created epic REP-1 with three tasks: REP-2 export endpoint, REP-3 download button,
+       REP-4 tests. Starting REP-2.
        ...
-       REP-21 done (commit 3f2a91c). REP-22 in progress; its resume card says: button wired,
+       REP-2 done (commit 3f2a91c). REP-3 in progress; its resume card says: button wired,
        next step is the empty-report message.
 
 (next day, a new session)
 You:   continue
-Agent: Picked up from yesterday's handover: REP-22, next step the empty-report message.
+Agent: Picked up from yesterday's handover: REP-3, next step the empty-report message.
 ```
 
 Every step above is a real record in Tasks: the roadmap entry, the document with its approval,
-the epic, the tasks with their notes, and the handover, linked to each other. A short recording
-and a screenshot of the web app are coming.
+the epic, the tasks with their notes, and the handover, linked to each other. The board in the
+web app, mid-way through:
+
+<p align="center"><img src="assets/board.png" width="960" alt="The Reports board in Tasks: one task to do, one in progress, one done, all in the CSV export epic"></p>
 
 ## Quick start
 
