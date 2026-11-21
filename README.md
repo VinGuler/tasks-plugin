@@ -24,7 +24,7 @@ their work, or with plain markdown files in your project (local mode, no account
 
 You ask for a feature; the agent runs the whole cycle in Tasks:
 
-<p align="center"><img src="assets/demo.gif" width="960" alt="The agent adds CSV export to the roadmap, writes a document the person approves, creates an epic with three tasks, moves them across the board with notes and a resume card, and the roadmap shows it done"></p>
+<p align="center"><img src="assets/demo.gif" width="960" alt="The agent adds CSV export to the roadmap, writes a document the person approves, creates an epic with three tasks, moves them across the board with notes, time and a resume card, and ends on the done epic with its document and tasks"></p>
 
 ```text
 You:   Plan CSV export for reports, then build it.
